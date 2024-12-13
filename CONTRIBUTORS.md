@@ -47,6 +47,7 @@ Guidelines for modifications:
 * Felix Yu
 * Gary Lvov
 * Giulio Romualdi
+* Haoran Zhou
 * HoJin Jeon
 * Jan Kerner
 * Jean Tampon
@@ -65,6 +66,7 @@ Guidelines for modifications:
 * Nuralem Abizov
 * Oyindamola Omotuyi
 * Özhan Özen
+* Peter Du
 * Qian Wan
 * Qinxi Yu
 * René Zurbrügg
