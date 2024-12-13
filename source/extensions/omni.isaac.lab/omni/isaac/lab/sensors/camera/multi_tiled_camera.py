@@ -21,13 +21,13 @@ from pxr import UsdGeom
 from omni.isaac.lab.utils.warp.kernels import reshape_tiled_image
 
 from ..sensor_base import SensorBase
-from .camera import Camera
+from .multi_camera import MultiCamera
 
 if TYPE_CHECKING:
-    from .tiled_camera_cfg import TiledCameraCfg
+    from .multi_tiled_camera_cfg import MultiTiledCameraCfg
 
 
-class TiledCamera(Camera):
+class MultiTiledCamera(MultiCamera):
     r"""The tiled rendering based camera sensor for acquiring the same data as the Camera class.
 
     This class inherits from the :class:`Camera` class but uses the tiled-rendering API to acquire
@@ -70,10 +70,10 @@ class TiledCamera(Camera):
 
     """
 
-    cfg: TiledCameraCfg
+    cfg: MultiTiledCameraCfg
     """The configuration parameters."""
 
-    def __init__(self, cfg: TiledCameraCfg):
+    def __init__(self, cfg: MultiTiledCameraCfg):
         """Initializes the tiled camera sensor.
 
         Args:
@@ -104,7 +104,7 @@ class TiledCamera(Camera):
         """Returns: A string containing information about the instance."""
         # message for class
         return (
-            f"Tiled Camera @ '{self.cfg.prim_path}': \n"
+            f"Multi Tiled Camera @ '{self.cfg.prim_path}': \n"
             f"\tdata types   : {list(self.data.output.keys())} \n"
             f"\tsemantic filter : {self.cfg.semantic_filter}\n"
             f"\tcolorize semantic segm.   : {self.cfg.colorize_semantic_segmentation}\n"
@@ -158,13 +158,17 @@ class TiledCamera(Camera):
         # Initialize parent class
         SensorBase._initialize_impl(self)
         # Create a view for the sensor
-        self._view = XFormPrimView(self.cfg.prim_path, reset_xform_properties=False)
+        exp = self.cfg.cams_per_env
+        prim_paths_expr = f"{self.cfg.prim_path}[0-{exp-1}]"
+        
+
+        self._view = XFormPrimView(prim_paths_expr, reset_xform_properties=False)
         self._view.initialize()
         # Check that sizes are correct
-        if self._view.count != self._num_envs:
+        if self._view.count != self._num_envs * self.cfg.cams_per_env:
             raise RuntimeError(
                 f"Number of camera prims in the view ({self._view.count}) does not match"
-                f" the number of environments ({self._num_envs})."
+                f" the number of environments times cameras per env ({self._num_envs} x {self.cams_per_env})."
             )
 
         # Create all env_ids buffer
@@ -287,7 +291,7 @@ class TiledCamera(Camera):
         """Checks if the data types are supported by the ray-caster camera."""
         # check if there is any intersection in unsupported types
         # reason: these use np structured data types which we can't yet convert to torch tensor
-        common_elements = set(cfg.data_types) & Camera.UNSUPPORTED_TYPES
+        common_elements = set(cfg.data_types) & MultiCamera.UNSUPPORTED_TYPES
         if common_elements:
             # provide alternative fast counterparts
             fast_common_elements = []

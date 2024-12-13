@@ -1,6 +1,6 @@
 [tool.isort]
 
-py_version = 310
+py_version = 311
 line_length = 120
 group_by_package = true
 
@@ -20,10 +20,10 @@ sections = [
 
 # Extra standard libraries considered as part of python (permissive licenses
 extra_standard_library = [
-    "numpy",
+    #"numpy",
     "h5py",
     "open3d",
-    "torch",
+    #"torch",
     "tensordict",
     "bpy",
     "matplotlib",
@@ -73,7 +73,7 @@ exclude = [
 ]
 
 typeCheckingMode = "basic"
-pythonVersion = "3.10"
+pythonVersion = "3.11"
 pythonPlatform = "Linux"
 enableTypeIgnoreComments = true
 
