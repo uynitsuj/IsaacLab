@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-from omni.isaac.lab.utils import configclass
+from isaaclab.utils import configclass
 
 from .multi_camera_cfg import MultiCameraCfg
 from .multi_tiled_camera import MultiTiledCamera

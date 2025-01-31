@@ -14,11 +14,11 @@ from typing import TYPE_CHECKING, Any
 import carb
 import omni.usd
 import warp as wp
-from omni.isaac.core.prims import XFormPrimView
-from omni.isaac.version import get_version
+from isaacsim.core.prims import XFormPrim
+from isaacsim.core.version import get_version
 from pxr import UsdGeom
 
-from omni.isaac.lab.utils.warp.kernels import reshape_tiled_image
+from isaaclab.utils.warp.kernels import reshape_tiled_image
 
 from ..sensor_base import SensorBase
 from .multi_camera import MultiCamera
@@ -162,7 +162,7 @@ class MultiTiledCamera(MultiCamera):
         prim_paths_expr = f"{self.cfg.prim_path}[0-{exp-1}]"
         
 
-        self._view = XFormPrimView(prim_paths_expr, reset_xform_properties=False)
+        self._view = XFormPrim(prim_paths_expr, reset_xform_properties=False)
         self._view.initialize()
         # Check that sizes are correct
         if self._view.count != self._num_envs * self.cfg.cams_per_env:
