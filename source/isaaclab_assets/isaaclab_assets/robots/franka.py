@@ -37,28 +37,43 @@ FRANKA_PANDA_CFG = ArticulationCfg(
     ),
     init_state=ArticulationCfg.InitialStateCfg(
         joint_pos={
-            "panda_joint1": 0.0,
-            "panda_joint2": -0.569,
-            "panda_joint3": 0.0,
-            "panda_joint4": -2.810,
-            "panda_joint5": 0.0,
-            "panda_joint6": 3.037,
-            "panda_joint7": 0.741,
+            # IsaacLab defaults
+            # "panda_joint1": 0.0,
+            # "panda_joint2": -0.569,
+            # "panda_joint3": 0.0,
+            # "panda_joint4": -2.810,
+            # "panda_joint5": 0.0,
+            # "panda_joint6": 3.037,
+            # "panda_joint7": 0.741,
+            # "panda_finger_joint.*": 0.04,
+            
+        #     -1.53074813,  0.82384831,  0.95768964, -1.92009866, -0.97212625,
+        # 2.30220342,  2.29940915
+        
+            "panda_joint1": -1.53074813,
+            "panda_joint2": 0.82384831,
+            "panda_joint3": 0.95768964,
+            "panda_joint4": -1.92009866,
+            "panda_joint5": -0.97212625,
+            "panda_joint6": 2.30220342,
+            "panda_joint7": 2.29940915,
             "panda_finger_joint.*": 0.04,
         },
     ),
     actuators={
         "panda_shoulder": ImplicitActuatorCfg(
             joint_names_expr=["panda_joint[1-4]"],
-            effort_limit=87.0,
-            velocity_limit=2.175,
+            # effort_limit=87.0,
+            effort_limit=120.0,
+            # velocity_limit=2.175,
             stiffness=80.0,
             damping=4.0,
         ),
         "panda_forearm": ImplicitActuatorCfg(
             joint_names_expr=["panda_joint[5-7]"],
-            effort_limit=12.0,
-            velocity_limit=2.61,
+            # effort_limit=12.0,
+            effort_limit=120.0,
+            # velocity_limit=2.61,
             stiffness=80.0,
             damping=4.0,
         ),
@@ -77,10 +92,12 @@ FRANKA_PANDA_CFG = ArticulationCfg(
 
 FRANKA_PANDA_HIGH_PD_CFG = FRANKA_PANDA_CFG.copy()
 FRANKA_PANDA_HIGH_PD_CFG.spawn.rigid_props.disable_gravity = True
-FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_shoulder"].stiffness = 400.0
-FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_shoulder"].damping = 80.0
-FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_forearm"].stiffness = 400.0
-FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_forearm"].damping = 80.0
+FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_shoulder"].stiffness = 4e4
+FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_shoulder"].damping = 8e1
+# FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_shoulder"].friction = 4e1
+FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_forearm"].stiffness = 4e4
+FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_forearm"].damping = 8e1
+# FRANKA_PANDA_HIGH_PD_CFG.actuators["panda_forearm"].friction = 4e1
 """Configuration of Franka Emika Panda robot with stiffer PD control.
 
 This configuration is useful for task-space control using differential IK.
